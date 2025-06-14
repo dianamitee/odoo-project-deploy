@@ -1,0 +1,28 @@
+<odoo>
+    <data>
+        <record id="email_template_manager_approval" model="mail.template">
+            <field name="name">Manager Approval Request</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="subject">Approval Needed for Purchase Order: ${object.name}</field>
+            <field name="email_from">${user.email}</field>
+            <field name="email_to">${object.user_id.email}</field>
+            <field name="body_html"><![CDATA[
+                <p>Hello,</p>
+                <p>The purchase order <strong>${object.name}</strong> requires manager approval.</p>
+                <p>Amount Total: ${object.amount_total}</p>
+            ]]></field>
+        </record>
+
+        <record id="email_template_finance_approval" model="mail.template">
+            <field name="name">Finance Approval Request</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="subject">Finance Approval Needed for PO: ${object.name}</field>
+            <field name="email_from">${user.email}</field>
+            <field name="email_to">${object.user_id.email}</field>
+            <field name="body_html"><![CDATA[
+                <p>Hello Finance Team,</p>
+                <p>The purchase order <strong>${object.name}</strong> exceeds $20,000 and needs your approval.</p>
+            ]]></field>
+        </record>
+    </data>
+</odoo>
