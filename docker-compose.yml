@@ -1,31 +1,32 @@
-version: '3.1'
+version: '3.8'
 
 services:
-  db:
-    image: postgres:13
-    environment:
-      POSTGRES_DB: odoo
-      POSTGRES_USER: odoo16v2
-      POSTGRES_PASSWORD: pass123$
+  web:
+    build: ./odoo
     ports:
-      - "5432:5432"
+      - "8071:8071"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8071
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=odoo
+      - DB_PASSWORD=odoo
+      - ADMIN_PASSWD=pass123$
     volumes:
-      - db_data:/var/lib/postgresql/data
-
-  odoo:
-    image: odoo:16
+      - ./odoo/custom_addons:/mnt/extra-addons
+      - ./odoo/odoo.conf:/etc/odoo/odoo.conf
     depends_on:
       - db
-    ports:
-      - "8071:8069"
-    volumes:
-      - ./odoo/custom_addons:/mnt/extra-addons/custom_addons
+
+  db:
+    image: postgres:15
     environment:
-      - HOST=db
-      - USER=odoo16v2
-      - PASSWORD=pass123$
-      - DATABASE=odoo
-    command: odoo -i custom_purchase --db_host=db --db_user=odoo16v2 --db_password=pass123$ --addons-path=/mnt/extra-addons/custom_addons
+      POSTGRES_DB: odoo
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data
 
 volumes:
-  db_data:
+  odoo-db-data:
