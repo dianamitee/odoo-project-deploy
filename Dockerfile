@@ -26,17 +26,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Set the working directory
 WORKDIR /app
 
-# Copy all your Odoo project files to /app
+# Copy your project files
 COPY . /app
 
 # Set up and activate a virtual environment
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Upgrade pip and install Python dependencies
-RUN pip install --upgrade pip \
- && pip install wheel setuptools \
- && pip install --no-cache-dir -r requirements.txt
+# Upgrade pip, setuptools, wheel, and Cython before installing requirements
+RUN pip install --upgrade pip setuptools wheel Cython
+
+# Install Python dependencies from requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Ensure start.sh is executable
 RUN chmod +x start.sh
