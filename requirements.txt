@@ -17,4 +17,3 @@ html2text==2020.1.16
 Cython==0.29.36
 greenlet==2.0.2
 gevent==22.10.2
-
