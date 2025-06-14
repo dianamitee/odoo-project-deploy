@@ -1,33 +1,48 @@
 # Use official Python 3.10 slim image as base
 FROM python:3.10-slim
 
-# Install system dependencies needed for Odoo and Python packages
-RUN apt-get update && apt-get install -y \
+# Install system dependencies for Odoo and Python packages
+RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     libxml2-dev \
-    libxslt-dev \
+    libxslt1-dev \
     libpq-dev \
     python3-dev \
     build-essential \
+    libffi-dev \
+    libssl-dev \
+    libjpeg-dev \
+    libldap2-dev \
+    libsasl2-dev \
+    zlib1g-dev \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libevent-dev \
+    curl \
+    ca-certificates \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
-# Set working directory inside container
+# Set the working directory
 WORKDIR /app
 
-# Copy your project files to /app in container
+# Copy all your Odoo project files to /app
 COPY . /app
 
-# Create and activate virtual environment
+# Set up and activate a virtual environment
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 # Upgrade pip and install Python dependencies
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip \
+ && pip install wheel setuptools \
+ && pip install --no-cache-dir -r requirements.txt
 
-# Make start.sh executable
+# Ensure start.sh is executable
 RUN chmod +x start.sh
 
-# Start Odoo when container runs
+# Expose Odoo's default port
+EXPOSE 8069
+
+# Start the Odoo server
 CMD ["./start.sh"]
