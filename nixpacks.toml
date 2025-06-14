@@ -1,3 +1,9 @@
 [phases.setup]
-apt_pkgs = ["git"]
+apt_pkgs = ["git", "libpq-dev", "python3-dev"]
 python_version = "3.10"
+
+[phases.build]
+cmds = ["chmod +x start.sh"]
+
+[phases.start]
+cmd = "./start.sh"
