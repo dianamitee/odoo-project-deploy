@@ -15,5 +15,5 @@ pyserial==3.5
 docutils==0.20.1
 html2text==2020.1.16
 Cython==0.29.36
+gevent==23.9.1
 greenlet==2.0.2
-gevent==22.10.2
